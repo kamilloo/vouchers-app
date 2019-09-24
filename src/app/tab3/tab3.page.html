@@ -1,9 +1,79 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab Three
+      QR Scanner
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content padding>
+    <ion-item>
+      <ion-label color="primary">
+        <h1 class="ion-text-center">
+            Enter you code
+        </h1>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>Your code: </ion-label>
+      <ion-input [value]="qrCode" placeholder="code" name="qrCode"  [(ngModel)]="qrCode" ></ion-input>
+    </ion-item>
+    <ion-item (click)="submitCode($event)" lines="none">
+        <ion-label color="success">
+            <ion-button color="primary" expand="block" size="large">Verify</ion-button>
+                <h1 class="ion-text-center" *ngIf="isVerifying">
+                    Veryfying...
+                </h1>
+        </ion-label>
+    </ion-item>
+    <ion-item lines="none">
+    <ion-label class="ion-text-center">
+        <ion-badge color="success" padding *ngIf="verified">Verified</ion-badge>
+        <ion-badge color="danger" padding *ngIf="rejected">Rejected</ion-badge>
+    </ion-label>
+    </ion-item>
+
+    <ion-item>
+        <ion-label>
+            Voucher
+        </ion-label>
+        <ion-label>
+            My Woucher
+        </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label>
+            type
+        </ion-label>
+        <ion-label>
+            Quote voucher
+        </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label>
+            Quote
+        </ion-label>
+        <ion-label>
+            100$
+        </ion-label>
+    </ion-item>
+
+    <ion-item (click)="submitCode($event)" lines="none">
+        <ion-label color="success">
+            <ion-button color="primary" expand="block" size="large">Confirm</ion-button>
+            <h1 class="ion-text-center" *ngIf="isVerifying">
+                Confirming...
+            </h1>
+            <ion-label class="ion-text-center">
+                <ion-badge color="success" padding *ngIf="verified">Success</ion-badge>
+            </ion-label>
+        </ion-label>
+    </ion-item>
+
+    <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="scan()">
+      <ion-icon name="qr-scanner"></ion-icon>
+    </ion-fab-button>
+</ion-fab>
+
+</ion-content>
