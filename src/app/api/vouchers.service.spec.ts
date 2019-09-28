@@ -3,7 +3,7 @@ import {inject, TestBed} from '@angular/core/testing';
 import { VouchersService } from './vouchers.service';
 import {HttpClient} from '@angular/common/http';
 import {Voucher} from '../models/voucher';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {
   HttpTestingController,
   HttpClientTestingModule
@@ -11,20 +11,20 @@ import {
 
 describe('VouchersService', () => {
   let httpClientSpy;
-  beforeEach(() => {
-    httpClientSpy = jasmine.createSpyObj('HttpClient', {
-      url: 'backend',
-      get() {
-        console.log('get method');
-        voucher.title = 'title';
-        return new Observable<Voucher>();
-      }
-    });
-    let voucher = new Voucher();
+  const id = 1;
+  const price = 100;
+  const type = 'service';
+  const title = 'title';
+  const expectedVoucher = new Voucher();
+  expectedVoucher.id = id;
+  expectedVoucher.title = title;
+  expectedVoucher.price = price;
+  expectedVoucher.type = type;
 
-    httpClientSpy.get.and.returnValue(
-        new Observable<Voucher>()
-      );
+
+  beforeEach(() => {
+    httpClientSpy = jasmine.createSpyObj('HttpClient', ['url', 'get']);
+    httpClientSpy.get.and.returnValue(of(expectedVoucher));
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
@@ -40,19 +40,18 @@ describe('VouchersService', () => {
     expect(service).toBeTruthy();
   });
   it('should call http get', () => {
-    console.log('test start');
+    const service: VouchersService = new VouchersService(httpClientSpy);
+    service.getVoucher('code');
+    expect(httpClientSpy.get).toHaveBeenCalled();
+
+  });
+  it('should get voucher dto', () => {
     const service: VouchersService = new VouchersService(httpClientSpy);
     service.getVoucher('code').subscribe((voucher: Voucher) => {
-
-      console.log('subscribe');
-      console.log(voucher);
-      expect(httpClientSpy.get).toHaveBeenCalled();
+      expect(voucher.id).toBe(id);
+      expect(voucher.title).toBe(title);
+      expect(voucher.price).toBe(price);
+      expect(voucher.type).toBe(type);
     });
   });
-  // it('should get voucher dto', () => {
-  //   const service: VouchersService = new VouchersService(httpClientSpy);
-  //   service.getVoucher('code').subscribe((voucher: Voucher) => {
-  //     expect(voucher.title).toBe('title');
-  //   });
-  // });
 });
