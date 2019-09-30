@@ -4,6 +4,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { VouchersService } from '../api/vouchers.service';
 import { Input } from '@angular/core';
 import {Voucher} from '../models/voucher';
+import {HttpError} from '../exceptions/http.error';
 
 @Component({
   selector: 'app-tab3',
@@ -77,6 +78,9 @@ export class Tab3Page {
 
     this.voucherService.getVoucher(this.qrCode).subscribe((voucher: Voucher) => {
        console.log(voucher.price, voucher.title, voucher.type);
+    }, (error: HttpError) => {
+      console.log(error.code);
+      console.log(error.error);
     })
     console.log('Random value:' + randomNumber);
 

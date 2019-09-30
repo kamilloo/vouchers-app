@@ -15,4 +15,8 @@ export class VouchersService {
   getVoucher(code: string) {
     return this.http.get(`${this.url}${code}`);
   }
+
+  payByVoucher(code: string) {
+    return this.http.post(`${this.url}${code}/pay`, {});
+  }
 }
