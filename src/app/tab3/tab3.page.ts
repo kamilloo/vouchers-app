@@ -14,10 +14,21 @@ import {HttpError} from '../exceptions/http.error';
 export class Tab3Page {
   rejected: boolean;
   verified: boolean;
+  paid: boolean;
+  noPaid: boolean;
   @Input() qrCode: string;
   isVerifying: boolean;
+  title: string;
+  voucher: Voucher;
   // constructor(private qrScanner: QRScanner) {}
-  constructor(private qrScanner: BarcodeScanner, private voucherService: VouchersService) {}
+  constructor(private qrScanner: BarcodeScanner, private voucherService: VouchersService) {
+    this.rejected = false;
+    this.verified = false;
+    this.isVerifying = false;
+    this.voucher = null;
+    this.paid = false;
+    this.noPaid = false;
+  }
 
   scan() {
     // this.qrScanner.prepare()
@@ -67,22 +78,26 @@ export class Tab3Page {
   }
 
   private verify() {
-    let randomNumber = Math.random();
-    if (randomNumber > 0.5) {
-      this.verified = true;
-      this.rejected = false;
-    } else {
-      this.verified = false;
-      this.rejected = true;
-    }
 
     this.voucherService.getVoucher(this.qrCode).subscribe((voucher: Voucher) => {
-       console.log(voucher.price, voucher.title, voucher.type);
+      this.voucher = new Voucher();
+      this.voucher.price = 100;
+      this.voucher.id = 1;
+      this.voucher.type = 'service';
+      this.voucher.title = 'title';
     }, (error: HttpError) => {
       console.log(error.code);
       console.log(error.error);
-    })
-    console.log('Random value:' + randomNumber);
+      this.voucher = new Voucher();
+      this.voucher.price = 100;
+      this.voucher.id = 1;
+      this.voucher.type = 'service';
+      this.voucher.title = 'title';
+      this.verified = true;
+      this.rejected = true;
+      this.paid = true;
+      this.noPaid = true;
 
+    });
   }
 }

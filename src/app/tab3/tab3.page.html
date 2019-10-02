@@ -32,43 +32,44 @@
         <ion-badge color="danger" padding *ngIf="rejected">Rejected</ion-badge>
     </ion-label>
     </ion-item>
-
-    <ion-item>
-        <ion-label>
-            Voucher
-        </ion-label>
-        <ion-label>
-            My Woucher
-        </ion-label>
-    </ion-item>
-    <ion-item>
-        <ion-label>
-            type
-        </ion-label>
-        <ion-label>
-            Quote voucher
-        </ion-label>
-    </ion-item>
-    <ion-item>
-        <ion-label>
-            Quote
-        </ion-label>
-        <ion-label>
-            100$
-        </ion-label>
-    </ion-item>
-
-    <ion-item (click)="submitCode($event)" lines="none">
-        <ion-label color="success">
-            <ion-button color="primary" expand="block" size="large">Confirm</ion-button>
-            <h1 class="ion-text-center" *ngIf="isVerifying">
-                Confirming...
-            </h1>
-            <ion-label class="ion-text-center">
-                <ion-badge color="success" padding *ngIf="verified">Success</ion-badge>
+    <div *ngIf="voucher">
+        <ion-item>
+            <ion-label>
+                Voucher
             </ion-label>
-        </ion-label>
+            <ion-label>
+                {{ voucher.title }}
+            </ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-label>
+                type
+            </ion-label>
+            <ion-label>
+                {{ voucher.type }}
+            </ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-label>
+                Quote
+            </ion-label>
+            <ion-label>
+                {{ voucher.price }}$
+            </ion-label>
+        </ion-item>
+        <ion-item (click)="submitCode($event)" lines="none">
+            <ion-label color="success">
+                <ion-button color="primary" expand="block" size="large">Confirm</ion-button>
+                <h1 class="ion-text-center" *ngIf="isVerifying">
+                    Confirming...
+                </h1>
+                <ion-label class="ion-text-center">
+                    <ion-badge color="success" padding *ngIf="paid">Paid successful</ion-badge>
+                    <ion-badge color="danger" padding *ngIf="noPaid">Ups!, Something went wrong</ion-badge>
+                </ion-label>
+            </ion-label>
     </ion-item>
+    </div>
 
     <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button (click)="scan()">

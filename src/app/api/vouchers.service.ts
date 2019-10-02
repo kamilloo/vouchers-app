@@ -7,7 +7,8 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class VouchersService {
-  url = 'http://vouchers.kp/api/vouchers/';
+  // url = 'http://vouchers.kp/api/vouchers/';
+  url = 'https://google.com/';
   apiKey: string;
 
   constructor(private http: HttpClient) { }
