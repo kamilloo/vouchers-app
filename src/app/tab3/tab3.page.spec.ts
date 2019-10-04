@@ -5,20 +5,25 @@ import { Tab3Page } from './tab3.page';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import {VouchersService} from '../api/vouchers.service';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {of} from 'rxjs';
+import {Voucher} from '../models/voucher';
+import {HttpError} from '../exceptions/http.error';
 
 describe('Tab3Page', () => {
   let component: Tab3Page;
   let fixture: ComponentFixture<Tab3Page>;
   let scannerSpy;
   let voucherServiceSpy;
+  const barcodeData = {
+    text: 'text'
+  };
 
   beforeEach(async(() => {
-    let scannerSpy = jasmine.createSpyObj('BarcodeScanner', {
-      url: 'test'
-    });
-    let voucherServiceSpy = jasmine.createSpyObj('VouchersService', {
-      url: 'test',
-    });
+    scannerSpy = jasmine.createSpyObj('BarcodeScanner', ['scan']);
+    voucherServiceSpy = jasmine.createSpyObj('VouchersService', ['getVoucher']);
+
+    scannerSpy.scan.and.returnValue(Promise.resolve(barcodeData));
+
     TestBed.configureTestingModule({
       providers: [
         { provide: VouchersService, useValue: voucherServiceSpy},
@@ -39,4 +44,62 @@ describe('Tab3Page', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('it scan barcode', () => {
+
+    component.scan();
+    Promise.resolve().then(() => {
+      expect(scannerSpy.scan).toHaveBeenCalled();
+    });
+  });
+
+  it('it scanner return qrCode', () => {
+    component.scan();
+    Promise.resolve().then(() => {
+      expect(component.qrCode).toEqual(barcodeData.text);
+    });
+  });
+
+  it('qrCode was submit and return Voucher', () => {
+    const voucher = new Voucher();
+    voucher.price = 100;
+    voucher.id = 1;
+    voucher.type = 'service';
+    voucher.title = 'title';
+    voucherServiceSpy.getVoucher.and.returnValue(of(voucher));
+
+    component.scan();
+    Promise.resolve().then(() => {
+      expect(voucherServiceSpy.getVoucher).toHaveBeenCalled();
+      expect(component.voucher).toEqual(voucher);
+      expect(component.verified).toEqual(false);
+      expect(component.rejected).toEqual(false);
+      expect(component.paid).toEqual(false);
+      expect(component.noPaid).toEqual(false);
+    });
+  });
+
+
+  it('qrCode was submit and return 404', () => {
+    const voucher = new Voucher();
+    voucher.price = 100;
+    voucher.id = 1;
+    voucher.type = 'service';
+    voucher.title = 'title';
+    const error = new HttpError();
+    voucherServiceSpy.getVoucher.and.returnValue(of(error));
+
+    component.scan();
+    Promise.resolve().catch(() => {
+      expect(voucherServiceSpy.getVoucher).toHaveBeenCalled();
+      expect(component.voucher).toEqual(voucher);
+      expect(component.verified).toEqual(true);
+      expect(component.rejected).toEqual(true);
+      expect(component.paid).toEqual(true);
+      expect(component.noPaid).toEqual(true);
+    });
+  });
+
+
+
 });

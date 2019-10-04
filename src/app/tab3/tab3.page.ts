@@ -57,7 +57,6 @@ export class Tab3Page {
     //     .catch((e: any) => console.log('Error is', e));
 
     this.qrScanner.scan().then(barcodeData => {
-      console.log('Barcode data', barcodeData);
       this.qrCode = barcodeData.text;
 
       this.verify();
@@ -86,8 +85,8 @@ export class Tab3Page {
       this.voucher.type = 'service';
       this.voucher.title = 'title';
     }, (error: HttpError) => {
-      console.log(error.code);
-      console.log(error.error);
+      // console.log(error.code);
+      // console.log(error.error);
       this.voucher = new Voucher();
       this.voucher.price = 100;
       this.voucher.id = 1;
@@ -97,7 +96,6 @@ export class Tab3Page {
       this.rejected = true;
       this.paid = true;
       this.noPaid = true;
-
     });
   }
 }
