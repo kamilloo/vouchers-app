@@ -64,16 +64,29 @@ export class Tab3Page {
       console.log('Error', err);
     });
   }
-
   submitCode(event) {
 
     event.target.hidden = 1;
-    this.isVerifying = true;
-    setTimeout(() => {
-      event.target.hidden = 0;
-      this.isVerifying = false;
-      this.verify();
-    }, 1000);
+    // this.isVerifying = true;
+    // setTimeout(() => {
+    //   event.target.hidden = 0;
+    //   this.isVerifying = false;
+    //   this.verify();
+    // }, 1000);
+
+    this.voucherService.payByVoucher(this.qrCode).subscribe((voucher: Voucher) => {
+
+    }, (error: HttpError) => {
+      // console.log(error.code);
+      // console.log(error.error);
+      this.voucher = new Voucher();
+      this.voucher.price = 100;
+      this.voucher.id = 1;
+      this.voucher.type = 'service';
+      this.voucher.title = 'title';
+      this.paid = true;
+      this.noPaid = false;
+    });
   }
 
   private verify() {
@@ -84,6 +97,8 @@ export class Tab3Page {
       this.voucher.id = 1;
       this.voucher.type = 'service';
       this.voucher.title = 'title';
+      this.verified = true;
+      this.rejected = false;
     }, (error: HttpError) => {
       // console.log(error.code);
       // console.log(error.error);
@@ -92,10 +107,8 @@ export class Tab3Page {
       this.voucher.id = 1;
       this.voucher.type = 'service';
       this.voucher.title = 'title';
-      this.verified = true;
+      this.verified = false;
       this.rejected = true;
-      this.paid = true;
-      this.noPaid = true;
     });
   }
 }

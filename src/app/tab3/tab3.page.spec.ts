@@ -17,12 +17,15 @@ describe('Tab3Page', () => {
   const barcodeData = {
     text: 'text'
   };
+  const voucher = new Voucher();
+
 
   beforeEach(async(() => {
     scannerSpy = jasmine.createSpyObj('BarcodeScanner', ['scan']);
     voucherServiceSpy = jasmine.createSpyObj('VouchersService', ['getVoucher']);
-
     scannerSpy.scan.and.returnValue(Promise.resolve(barcodeData));
+
+    voucherServiceSpy.getVoucher.and.returnValue(of(voucher));
 
     TestBed.configureTestingModule({
       providers: [
@@ -51,6 +54,7 @@ describe('Tab3Page', () => {
     Promise.resolve().then(() => {
       expect(scannerSpy.scan).toHaveBeenCalled();
     });
+
   });
 
   it('it scanner return qrCode', () => {
@@ -61,12 +65,10 @@ describe('Tab3Page', () => {
   });
 
   it('qrCode was submit and return Voucher', () => {
-    const voucher = new Voucher();
     voucher.price = 100;
     voucher.id = 1;
     voucher.type = 'service';
     voucher.title = 'title';
-    voucherServiceSpy.getVoucher.and.returnValue(of(voucher));
 
     component.scan();
     Promise.resolve().then(() => {
