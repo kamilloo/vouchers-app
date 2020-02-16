@@ -24,9 +24,9 @@ export class AppComponent {
       icon: 'home'
     },
     {
-      title: 'List',
-      url: '/list',
-      icon: 'list'
+      title: 'QR Scanner',
+      url: '/qr-scanner',
+      icon: 'card'
     },
   ];
 

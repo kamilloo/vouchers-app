@@ -9,8 +9,12 @@ import { User } from '../models/user';
   providedIn: 'root'
 })
 export class AuthService {
-  isLoggedIn = false;
-  token: any;
+  // isLoggedIn = false;
+  isLoggedIn = true;
+  token = {
+   token_type: 'Bearer',
+   access_token:  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbXl2b3VjaGVycy5wbFwvYXBpXC9sb2dpbiIsImlhdCI6MTU4MTg4ODQwOSwiZXhwIjoxNTgxODkyMDA5LCJuYmYiOjE1ODE4ODg0MDksImp0aSI6ImJjbkppcURXMVN0TERERFYiLCJzdWIiOjQsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.bD0YwCjjG-WgyY-QteDRjsm2CVqcUd64hLY5p34-KVk'
+  };
 
   constructor(
       private http: HttpClient,
@@ -56,23 +60,28 @@ export class AuthService {
         )
   }
   user() {
-    const headers = new HttpHeaders({
-      'Authorization': this.token["token_type"]+" "+this.token["access_token"]
-    });
-    return this.http.get<User>(this.env.API_URL + 'api/user', { headers: headers })
+      const headers = this.getAuthHeaders();
+      return this.http.get<User>(this.env.API_URL + 'api/user', { headers: headers })
         .pipe(
             tap(user => {
               return user;
             })
         )
   }
-  getToken() {
+
+  getAuthHeaders() {
+        return new HttpHeaders({
+            'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
+        });
+  }
+
+    getToken() {
 
       return (new Promise((resolve, reject) => {
           // executor (the producing code, "singer")
       })).then(() => {
-          this.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbXl2b3VjaGVycy5wbFwvYXBpXC9sb2dpbiIsImlhdCI6MTU4MTc4OTM0MiwiZXhwIjoxNTgxNzkyOTQyLCJuYmYiOjE1ODE3ODkzNDIsImp0aSI6ImEzdzhwdkNjWEtpc0JMcHkiLCJzdWIiOjQsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.yvtg_EY6gJmjuuN5FO3uVIlrsqPsSVJYhIb12opXnrI';
-          this.isLoggedIn = true;
+          // this.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbXl2b3VjaGVycy5wbFwvYXBpXC9sb2dpbiIsImlhdCI6MTU4MTg4ODQwOSwiZXhwIjoxNTgxODkyMDA5LCJuYmYiOjE1ODE4ODg0MDksImp0aSI6ImJjbkppcURXMVN0TERERFYiLCJzdWIiOjQsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.bD0YwCjjG-WgyY-QteDRjsm2CVqcUd64hLY5p34-KVk';
+          // this.isLoggedIn = true;
 
       });
     // return this.storage.getItem('token').then(

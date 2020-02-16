@@ -4,6 +4,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { VouchersService } from '../api/vouchers.service';
 import { Input } from '@angular/core';
 import {Voucher} from '../models/voucher';
+import {Order} from '../models/order';
 import {HttpError} from '../exceptions/http.error';
 
 @Component({
@@ -65,7 +66,6 @@ export class Tab3Page {
     });
   }
   submitCode(event) {
-
     event.target.hidden = 1;
     // this.isVerifying = true;
     // setTimeout(() => {
@@ -73,6 +73,13 @@ export class Tab3Page {
     //   this.isVerifying = false;
     //   this.verify();
     // }, 1000);
+    this.verify();
+
+
+  }
+  payByCode(event) {
+
+
 
     this.voucherService.payByVoucher(this.qrCode).subscribe((voucher: Voucher) => {
 
@@ -91,14 +98,15 @@ export class Tab3Page {
 
   private verify() {
 
-    this.voucherService.getVoucher(this.qrCode).subscribe((voucher: Voucher) => {
-      this.voucher = new Voucher();
-      this.voucher.price = 100;
-      this.voucher.id = 1;
-      this.voucher.type = 'service';
-      this.voucher.title = 'title';
+    this.voucherService.getVoucher(this.qrCode).subscribe((order: Order) => {
+      // this.voucher = new Voucher();
+      // this.voucher.price = 100;
+      // this.voucher.id = 1;
+      // this.voucher.type = 'service';
+      // this.voucher.title = 'title';
       this.verified = true;
       this.rejected = false;
+      console.log(order);
     }, (error: HttpError) => {
       // console.log(error.code);
       // console.log(error.error);
