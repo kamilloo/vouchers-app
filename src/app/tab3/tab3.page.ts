@@ -6,6 +6,7 @@ import { Input } from '@angular/core';
 import {Voucher} from '../models/voucher';
 import {Order} from '../models/order';
 import {HttpError} from '../exceptions/http.error';
+import {ResponseSuccess} from '../models/response.success';
 
 @Component({
   selector: 'app-tab3',
@@ -21,6 +22,7 @@ export class Tab3Page {
   isVerifying: boolean;
   title: string;
   voucher: Voucher;
+  order: Order;
   // constructor(private qrScanner: QRScanner) {}
   constructor(private qrScanner: BarcodeScanner, private voucherService: VouchersService) {
     this.rejected = false;
@@ -88,7 +90,7 @@ export class Tab3Page {
       // console.log(error.error);
       this.voucher = new Voucher();
       this.voucher.price = 100;
-      this.voucher.id = 1;
+      // this.voucher.id = 1;
       this.voucher.type = 'service';
       this.voucher.title = 'title';
       this.paid = true;
@@ -98,7 +100,7 @@ export class Tab3Page {
 
   private verify() {
 
-    this.voucherService.getVoucher(this.qrCode).subscribe((order: Order) => {
+    this.voucherService.getVoucher(this.qrCode).subscribe((response: ResponseSuccess) => {
       // this.voucher = new Voucher();
       // this.voucher.price = 100;
       // this.voucher.id = 1;
@@ -106,13 +108,15 @@ export class Tab3Page {
       // this.voucher.title = 'title';
       this.verified = true;
       this.rejected = false;
-      console.log(order);
+      this.order = response.data;
+      this.paid = this.order.paid;
+      this.noPaid = !this.order.paid;
     }, (error: HttpError) => {
       // console.log(error.code);
       // console.log(error.error);
       this.voucher = new Voucher();
       this.voucher.price = 100;
-      this.voucher.id = 1;
+      // this.voucher.id = 1;
       this.voucher.type = 'service';
       this.voucher.title = 'title';
       this.verified = false;

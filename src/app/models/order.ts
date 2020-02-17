@@ -9,8 +9,8 @@ export class Order {
     phone: string;
     email: string;
     status: string;
-    paid: string;
-    used_at: string;
+    paid: boolean;
+    used_at: any;
     created_at: string;
     updated_at: string;
     voucher: Voucher;
