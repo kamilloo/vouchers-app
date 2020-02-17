@@ -18,11 +18,11 @@ export class AppComponent {
       url: '/dashboard',
       icon: 'home'
     },
-    {
-      title: 'Home',
-      url: '/home',
-      icon: 'home'
-    },
+    // {
+    //   title: 'Home',
+    //   url: '/home',
+    //   icon: 'home'
+    // },
     {
       title: 'QR Scanner',
       url: '/qr-scanner',

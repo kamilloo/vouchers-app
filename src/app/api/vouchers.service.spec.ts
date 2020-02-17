@@ -10,9 +10,12 @@ import {
 } from '@angular/common/http/testing';
 import {PaymentConfirmation} from '../models/payment.confirmation';
 import {HttpError} from '../exceptions/http.error';
+import {AuthService} from '../services/auth.service';
 
 describe('VouchersService', () => {
   let httpClientSpy;
+  let authServiceSpy;
+
   const id = 1;
   const price = 100;
   const type = 'service';
@@ -34,22 +37,25 @@ describe('VouchersService', () => {
         'get',
         'post'
     ]);
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['getAuthHeaders']);
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
           VouchersService,
-        { provide: HttpClient, useValue: httpClientSpy}
+        { provide: HttpClient, useValue: httpClientSpy},
+        { provide: AuthService, useValue: authServiceSpy}
       ]
     });
 
   });
 
   it('should be created', () => {
-    const service: VouchersService = new VouchersService(httpClientSpy);
+    const service: VouchersService = new VouchersService(httpClientSpy, authServiceSpy);
     expect(service).toBeTruthy();
   });
   it('should call http get', () => {
-    const service: VouchersService = new VouchersService(httpClientSpy);
+    const service: VouchersService = new VouchersService(httpClientSpy, authServiceSpy);
     service.getVoucher('code');
     expect(httpClientSpy.get).toHaveBeenCalled();
 
@@ -58,9 +64,9 @@ describe('VouchersService', () => {
   it('voucher not found and get 404', () => {
     const httpError = new HttpError();
     httpError.error = 'error';
-    httpError.code = '404';
+    httpError.code = '405';
     httpClientSpy.get.and.returnValue(of(httpError));
-    const service: VouchersService = new VouchersService(httpClientSpy);
+    const service: VouchersService = new VouchersService(httpClientSpy, authServiceSpy);
     service.getVoucher('code').subscribe((voucher: HttpError) => {
       expect(voucher.error).toBe('error');
       expect(voucher.code).toBe('404');
@@ -69,7 +75,7 @@ describe('VouchersService', () => {
   });
   it('should get voucher dto', () => {
     httpClientSpy.get.and.returnValue(of(expectedVoucher));
-    const service: VouchersService = new VouchersService(httpClientSpy);
+    const service: VouchersService = new VouchersService(httpClientSpy, authServiceSpy);
     service.getVoucher('code').subscribe((voucher: Voucher) => {
       expect(voucher.id).toBe(id);
       expect(voucher.title).toBe(title);
@@ -79,14 +85,14 @@ describe('VouchersService', () => {
   });
 
   it('can pay by voucher', () => {
-    const service: VouchersService = new VouchersService(httpClientSpy);
+    const service: VouchersService = new VouchersService(httpClientSpy, authServiceSpy);
     service.payByVoucher('code');
     expect(httpClientSpy.post).toHaveBeenCalled();
   });
 
   it('pay by voucher and retrieve success', () => {
     httpClientSpy.post.and.returnValue(of(successfulPaymentConfirmation));
-    const service: VouchersService = new VouchersService(httpClientSpy);
+    const service: VouchersService = new VouchersService(httpClientSpy, authServiceSpy);
     service.payByVoucher('code').subscribe((confirmation: PaymentConfirmation) => {
       expect(confirmation.status).toBe('success');
     });
@@ -94,7 +100,7 @@ describe('VouchersService', () => {
 
   it('pay by voucher and retrieve failed', () => {
     httpClientSpy.post.and.returnValue(of(failedPaymentConfirmation));
-    const service: VouchersService = new VouchersService(httpClientSpy);
+    const service: VouchersService = new VouchersService(httpClientSpy, authServiceSpy);
     service.payByVoucher('code').subscribe((confirmation: PaymentConfirmation) => {
       expect(confirmation.status).toBe('failed');
     });

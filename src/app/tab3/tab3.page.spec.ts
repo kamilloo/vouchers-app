@@ -8,6 +8,7 @@ import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {of} from 'rxjs';
 import {Voucher} from '../models/voucher';
 import {HttpError} from '../exceptions/http.error';
+import {AuthService} from '../services/auth.service';
 
 describe('Tab3Page', () => {
   let component: Tab3Page;
@@ -23,6 +24,7 @@ describe('Tab3Page', () => {
   beforeEach(async(() => {
     scannerSpy = jasmine.createSpyObj('BarcodeScanner', ['scan']);
     voucherServiceSpy = jasmine.createSpyObj('VouchersService', ['getVoucher']);
+
     scannerSpy.scan.and.returnValue(Promise.resolve(barcodeData));
 
     voucherServiceSpy.getVoucher.and.returnValue(of(voucher));

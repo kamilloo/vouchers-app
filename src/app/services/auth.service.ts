@@ -34,7 +34,7 @@ export class AuthService {
           //         },
           //         error => console.error('Error storing item', error)
           //     );
-          this.token = token;
+          // this.token = token;
           this.isLoggedIn = true;
           return token;
         }),
