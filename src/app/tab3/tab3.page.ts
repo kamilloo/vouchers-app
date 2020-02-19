@@ -7,6 +7,8 @@ import {Voucher} from '../models/voucher';
 import {Order} from '../models/order';
 import {HttpError} from '../exceptions/http.error';
 import {ResponseSuccess} from '../models/response.success';
+import {PaymentConfirmation} from '../models/payment.confirmation';
+import {ResponseError} from '../models/response.error';
 
 @Component({
   selector: 'app-tab3',
@@ -20,17 +22,20 @@ export class Tab3Page {
   noPaid: boolean;
   @Input() qrCode: string;
   isVerifying: boolean;
-  title: string;
-  voucher: Voucher;
   order: Order;
+  paymentConfirmation: PaymentConfirmation;
+  responseError: ResponseError;
   // constructor(private qrScanner: QRScanner) {}
+  used_at: any;
+  canPay: boolean;
+  expired_at: any;
   constructor(private qrScanner: BarcodeScanner, private voucherService: VouchersService) {
     this.rejected = false;
     this.verified = false;
     this.isVerifying = false;
-    this.voucher = null;
     this.paid = false;
     this.noPaid = false;
+    this.canPay = false;
   }
 
   scan() {
@@ -81,44 +86,39 @@ export class Tab3Page {
   }
   payByCode(event) {
 
-
-
-    this.voucherService.payByVoucher(this.qrCode).subscribe((voucher: Voucher) => {
-
-    }, (error: HttpError) => {
-      // console.log(error.code);
-      // console.log(error.error);
-      this.voucher = new Voucher();
-      this.voucher.price = 100;
-      // this.voucher.id = 1;
-      this.voucher.type = 'service';
-      this.voucher.title = 'title';
+    this.voucherService.payByVoucher(this.qrCode).subscribe((response: ResponseSuccess) => {
+      this.paymentConfirmation = response.data;
       this.paid = true;
       this.noPaid = false;
+
+    }, (error: HttpError) => {
+      this.responseError = error.error;
+      this.paid = false;
+      this.noPaid = true;
     });
   }
 
   private verify() {
 
     this.voucherService.getVoucher(this.qrCode).subscribe((response: ResponseSuccess) => {
-      // this.voucher = new Voucher();
-      // this.voucher.price = 100;
-      // this.voucher.id = 1;
-      // this.voucher.type = 'service';
-      // this.voucher.title = 'title';
+
       this.verified = true;
       this.rejected = false;
       this.order = response.data;
-      this.paid = this.order.paid;
-      this.noPaid = !this.order.paid;
+      if (this.order.used_at)
+      {
+        this.used_at = new Date(this.order.used_at);
+      }else{
+        this.canPay = true;
+      }
+      if (this.order.expired_at)
+      {
+        this.expired_at = new Date(this.order.expired_at);
+      }
+
     }, (error: HttpError) => {
-      // console.log(error.code);
-      // console.log(error.error);
-      this.voucher = new Voucher();
-      this.voucher.price = 100;
-      // this.voucher.id = 1;
-      this.voucher.type = 'service';
-      this.voucher.title = 'title';
+      this.responseError = error.error;
+
       this.verified = false;
       this.rejected = true;
     });

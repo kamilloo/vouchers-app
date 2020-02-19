@@ -19,6 +19,7 @@ export class VouchersService {
   }
 
   payByVoucher(code: string) {
-    return this.http.post(`${this.url}${code}/pay`, {});
+    const headers = this.authService.getAuthHeaders();
+    return this.http.post(`${this.url}${code}/pay`, {}, {headers:headers});
   }
 }

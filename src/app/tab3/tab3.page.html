@@ -35,44 +35,62 @@
         <ion-badge color="danger" padding *ngIf="rejected">Rejected</ion-badge>
     </ion-label>
     </ion-item>
-    <div *ngIf="voucher">
+    <div *ngIf="order">
         <ion-item>
             <ion-label>
                 Voucher
             </ion-label>
             <ion-label>
-                {{ voucher.title }}
+                {{ order.voucher.title }}
             </ion-label>
         </ion-item>
         <ion-item>
             <ion-label>
-                type
+                Typ
             </ion-label>
             <ion-label>
-                {{ voucher.type }}
+                {{ order.voucher.type }}
             </ion-label>
         </ion-item>
         <ion-item>
             <ion-label>
-                Quote
+                Cena
             </ion-label>
             <ion-label>
-                {{ voucher.price }}$
+                {{ order.voucher.price }} zł
             </ion-label>
         </ion-item>
-        <ion-item (click)="payByCode($event)" lines="none">
-            <ion-label color="success">
-                <ion-button color="primary" expand="block" size="large">Confirm</ion-button>
-                <h1 class="ion-text-center" *ngIf="isVerifying">
-                    Confirming...
-                </h1>
-                <ion-label class="ion-text-center">
-                    <ion-badge color="success" padding *ngIf="paid">Paid successful</ion-badge>
-                    <ion-badge color="danger" padding *ngIf="noPaid">Ups!, Something went wrong</ion-badge>
-                </ion-label>
+        <ion-item *ngIf="used_at">
+            <ion-label>
+                Wykorzystany dnia:
             </ion-label>
-    </ion-item>
+            <ion-label>
+                {{ used_at |  date:'dd-MM-yyyy'}}
+            </ion-label>
+        </ion-item>
+        <ion-item *ngIf="expired_at">
+            <ion-label>
+                Ważny do dnia:
+            </ion-label>
+            <ion-label>
+                {{ expired_at |  date:'dd-MM-yyyy'}}
+            </ion-label>
+        </ion-item>
+
     </div>
+    <ion-item (click)="payByCode($event)" lines="none" *ngIf="canPay">
+        <ion-label color="success">
+            <ion-button color="primary" expand="block" size="large">Confirm</ion-button>
+            <h1 class="ion-text-center" *ngIf="isVerifying">
+                Confirming...
+            </h1>
+            <ion-label class="ion-text-center">
+                <ion-badge color="success" padding *ngIf="paid">Paid successful</ion-badge>
+                <ion-badge color="danger" padding *ngIf="noPaid">{{ responseError.message }}</ion-badge>
+            </ion-label>
+        </ion-label>
+    </ion-item>
+
 
     <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button (click)="scan()">

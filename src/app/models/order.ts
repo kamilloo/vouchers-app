@@ -1,17 +1,14 @@
 import {Voucher} from './voucher';
 
 export class Order {
-    id: number;
     delivery: string;
-    price: number;
-    first_name: string;
-    last_name: string;
+    full_name: string;
     phone: string;
     email: string;
+    qr_code: string;
     status: string;
     paid: boolean;
     used_at: any;
-    created_at: string;
-    updated_at: string;
+    expired_at: any;
     voucher: Voucher;
 }

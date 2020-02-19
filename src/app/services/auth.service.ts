@@ -13,7 +13,7 @@ export class AuthService {
   isLoggedIn = true;
   token = {
    token_type: 'Bearer',
-   access_token:  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbXl2b3VjaGVycy5wbFwvYXBpXC9sb2dpbiIsImlhdCI6MTU4MTg4ODQwOSwiZXhwIjoxNTgxODkyMDA5LCJuYmYiOjE1ODE4ODg0MDksImp0aSI6ImJjbkppcURXMVN0TERERFYiLCJzdWIiOjQsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.bD0YwCjjG-WgyY-QteDRjsm2CVqcUd64hLY5p34-KVk'
+   access_token:  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvbXl2b3VjaGVycy5wbFwvYXBpXC9sb2dpbiIsImlhdCI6MTU4MjE0NzY5MSwiZXhwIjoxNTgyMTUxMjkxLCJuYmYiOjE1ODIxNDc2OTEsImp0aSI6IkhUNExzUnV1YVBvYTVZZjAiLCJzdWIiOjQsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.1ofxrHYeJwctcOoDi6YypB9PwYt9e4UBwoID_XbC8CM'
   };
 
   constructor(
