@@ -3,11 +3,24 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Dashboard</ion-title>
+    <ion-title>
+      Home
+      <ion-icon class="ion-float-right" name="home"></ion-icon>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <div *ngIf="user != undefined">
-    Welcome {{ user["name"]  }}
-  </div>
+  <ion-card class="welcome-card">
+    <ion-img src="/assets/welcome.png"></ion-img>
+    <ion-card-header>
+      <ion-card-subtitle>Bony upominkowe</ion-card-subtitle>
+      <ion-card-title>Prosto i przejrzyście</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <h1 *ngIf="user != undefined" padding-vertical>
+        Witaj {{ user.profile.first_name  }}
+      </h1>
+      <p>Cieszymy się że z nami jesteś :)</p>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

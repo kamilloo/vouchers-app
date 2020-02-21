@@ -3,36 +3,38 @@
       <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
       </ion-buttons>
+
       <ion-title>
-      QR Scanner
-    </ion-title>
+          Skaner kodów QR
+          <ion-icon class="ion-float-right" name="card"></ion-icon>
+      </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
     <ion-item>
       <ion-label color="primary">
-        <h1 class="ion-text-center">
-            Enter you code
+        <h1 class="ion-text-center ion-text-wrap">
+            Skanuj kod QR lub wprowadź ręcznie
         </h1>
       </ion-label>
     </ion-item>
     <ion-item lines="none">
-      <ion-label>Your code: </ion-label>
-      <ion-input [value]="qrCode" placeholder="code" name="qrCode"  [(ngModel)]="qrCode" ></ion-input>
+      <ion-label>Kod QR: </ion-label>
+      <ion-input [value]="qrCode" placeholder=" wpisz ręcznie..." name="qrCode"  [(ngModel)]="qrCode" ></ion-input>
     </ion-item>
     <ion-item (click)="submitCode($event)" lines="none">
         <ion-label color="success">
-            <ion-button color="primary" expand="block" size="large">Verify</ion-button>
+            <ion-button color="primary" expand="block" size="large">Wyślij</ion-button>
                 <h1 class="ion-text-center" *ngIf="isVerifying">
-                    Veryfying...
+                    Sprawdzanie...
                 </h1>
         </ion-label>
     </ion-item>
     <ion-item lines="none">
     <ion-label class="ion-text-center">
-        <ion-badge color="success" padding *ngIf="verified">Verified</ion-badge>
-        <ion-badge color="danger" padding *ngIf="rejected">Rejected</ion-badge>
+        <ion-badge color="success" padding *ngIf="verified">Kod poprawny</ion-badge>
+        <ion-badge color="danger" padding *ngIf="rejected">Kod odrzucony</ion-badge>
     </ion-label>
     </ion-item>
     <div *ngIf="order">
@@ -80,12 +82,12 @@
     </div>
     <ion-item (click)="payByCode($event)" lines="none" *ngIf="canPay">
         <ion-label color="success">
-            <ion-button color="primary" expand="block" size="large">Confirm</ion-button>
+            <ion-button color="primary" expand="block" size="large">Potwierź</ion-button>
             <h1 class="ion-text-center" *ngIf="isVerifying">
-                Confirming...
+                Potwierdzanie...
             </h1>
             <ion-label class="ion-text-center">
-                <ion-badge color="success" padding *ngIf="paid">Paid successful</ion-badge>
+                <ion-badge color="success" padding *ngIf="paid">Gotowe</ion-badge>
                 <ion-badge color="danger" padding *ngIf="noPaid">{{ responseError.message }}</ion-badge>
             </ion-label>
         </ion-label>

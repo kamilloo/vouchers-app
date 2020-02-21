@@ -14,7 +14,7 @@ import { AlertService } from './services/alert.service';
 export class AppComponent {
   public appPages = [
     {
-      title: 'Dashboard',
+      title: 'Home',
       url: '/dashboard',
       icon: 'home'
     },
@@ -24,7 +24,7 @@ export class AppComponent {
     //   icon: 'home'
     // },
     {
-      title: 'QR Scanner',
+      title: 'Skaner QR',
       url: '/qr-scanner',
       icon: 'card'
     },

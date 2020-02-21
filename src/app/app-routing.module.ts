@@ -6,7 +6,7 @@ const routes: Routes = [
 
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'landing',
     pathMatch: 'full'
   },
   { path: 'landing', loadChildren: './pages/landing/landing.module#LandingPageModule' },
