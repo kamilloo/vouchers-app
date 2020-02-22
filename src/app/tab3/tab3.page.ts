@@ -9,6 +9,7 @@ import {HttpError} from '../exceptions/http.error';
 import {ResponseSuccess} from '../models/response.success';
 import {PaymentConfirmation} from '../models/payment.confirmation';
 import {ResponseError} from '../models/response.error';
+import {NavController} from '@ionic/angular';
 
 @Component({
   selector: 'app-tab3',
@@ -22,6 +23,7 @@ export class Tab3Page {
   noPaid: boolean;
   @Input() qrCode: string;
   isVerifying: boolean;
+  isReady: boolean;
   order: Order;
   paymentConfirmation: PaymentConfirmation;
   responseError: ResponseError;
@@ -29,10 +31,11 @@ export class Tab3Page {
   used_at: any;
   canPay: boolean;
   expired_at: any;
-  constructor(private qrScanner: BarcodeScanner, private voucherService: VouchersService) {
+  constructor(private qrScanner: BarcodeScanner, private voucherService: VouchersService, private navCtrl: NavController) {
     this.rejected = false;
     this.verified = false;
     this.isVerifying = false;
+    this.isReady = true;
     this.paid = false;
     this.noPaid = false;
     this.canPay = false;
@@ -72,14 +75,7 @@ export class Tab3Page {
       console.log('Error', err);
     });
   }
-  submitCode(event) {
-    event.target.hidden = 1;
-    // this.isVerifying = true;
-    // setTimeout(() => {
-    //   event.target.hidden = 0;
-    //   this.isVerifying = false;
-    //   this.verify();
-    // }, 1000);
+  submitCode() {
     this.verify();
 
 
@@ -100,6 +96,9 @@ export class Tab3Page {
 
   private verify() {
 
+    this.isVerifying = true;
+    this.isReady = false;
+
     this.voucherService.getVoucher(this.qrCode).subscribe((response: ResponseSuccess) => {
 
       this.verified = true;
@@ -119,8 +118,15 @@ export class Tab3Page {
     }, (error: HttpError) => {
       this.responseError = error.error;
 
+      this.isReady = true;
       this.verified = false;
       this.rejected = true;
+    }, () => {
+      this.isVerifying = false;
     });
+  }
+
+  resetPage() {
+    this.navCtrl.navigateRoot('/qr-scanner');
   }
 }

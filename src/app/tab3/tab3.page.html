@@ -7,6 +7,7 @@
       <ion-title>
           Skaner kodów QR
           <ion-icon class="ion-float-right" name="card"></ion-icon>
+          <ion-button color="light" (click)="resetPage()">Reset</ion-button>
       </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -23,9 +24,9 @@
       <ion-label>Kod QR: </ion-label>
       <ion-input [value]="qrCode" placeholder=" wpisz ręcznie..." name="qrCode"  [(ngModel)]="qrCode" ></ion-input>
     </ion-item>
-    <ion-item (click)="submitCode($event)" lines="none">
+    <ion-item lines="none">
         <ion-label color="success">
-            <ion-button color="primary" expand="block" size="large">Wyślij</ion-button>
+            <ion-button *ngIf="isReady" (click)="submitCode()" color="primary" expand="block" size="large">Wyślij</ion-button>
                 <h1 class="ion-text-center" *ngIf="isVerifying">
                     Sprawdzanie...
                 </h1>
@@ -40,12 +41,26 @@
     <div *ngIf="order">
         <ion-item>
             <ion-label>
-                Voucher
-            </ion-label>
-            <ion-label>
                 {{ order.voucher.title }}
             </ion-label>
         </ion-item>
+        <ion-item>
+            <ion-label>
+                Osoba
+            </ion-label>
+            <ion-label>
+                {{ order.full_name }}
+            </ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-label>
+                Forma dostawy
+            </ion-label>
+            <ion-label>
+                {{ order.delivery }}
+            </ion-label>
+        </ion-item>
+
         <ion-item>
             <ion-label>
                 Typ
@@ -54,14 +69,40 @@
                 {{ order.voucher.type }}
             </ion-label>
         </ion-item>
-        <ion-item>
-            <ion-label>
-                Cena
-            </ion-label>
-            <ion-label>
-                {{ order.voucher.price }} zł
-            </ion-label>
-        </ion-item>
+        <div *ngIf="isQuoteable()">
+            <ion-item>
+                <ion-label>
+                    Do wykorzystania
+                </ion-label>
+                <ion-label>
+                    {{ order.voucher.price }} zł
+                </ion-label>
+            </ion-item>
+
+        </div>
+        <div *ngIf="isProductable()">
+            <ion-item>
+                <ion-label>
+                    {{ order.voucher.product.title }} zł
+                </ion-label>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>
+                    {{ order.voucher.product.description }} zł
+                </ion-label>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>
+                    Wartość usługi
+                </ion-label>
+                <ion-label>
+                    {{ order.voucher.price }} zł
+                </ion-label>
+            </ion-item>
+        </div>
+
         <ion-item *ngIf="used_at">
             <ion-label>
                 Wykorzystany dnia:
@@ -94,10 +135,10 @@
     </ion-item>
 
 
-    <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-    <ion-fab-button (click)="scan()">
-      <ion-icon name="qr-scanner"></ion-icon>
-    </ion-fab-button>
-</ion-fab>
+    <ion-fab *ngIf="isReady" vertical="bottom" horizontal="center" slot="fixed">
+        <ion-fab-button (click)="scan()">
+          <ion-icon name="qr-scanner"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
 
 </ion-content>
