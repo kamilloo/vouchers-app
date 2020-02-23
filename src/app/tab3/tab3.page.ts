@@ -31,6 +31,9 @@ export class Tab3Page {
   used_at: any;
   canPay: boolean;
   expired_at: any;
+  quoteType: string;
+  serviceType: string;
+  packageType: string;
   constructor(private qrScanner: BarcodeScanner, private voucherService: VouchersService, private navCtrl: NavController) {
     this.rejected = false;
     this.verified = false;
@@ -39,6 +42,9 @@ export class Tab3Page {
     this.paid = false;
     this.noPaid = false;
     this.canPay = false;
+    this.quoteType = 'quote';
+    this.serviceType = 'service';
+    this.packageType = 'service-package';
   }
 
   scan() {
@@ -104,14 +110,12 @@ export class Tab3Page {
       this.verified = true;
       this.rejected = false;
       this.order = response.data;
-      if (this.order.used_at)
-      {
+      if (this.order.used_at) {
         this.used_at = new Date(this.order.used_at);
-      }else{
+      } else {
         this.canPay = true;
       }
-      if (this.order.expired_at)
-      {
+      if (this.order.expired_at) {
         this.expired_at = new Date(this.order.expired_at);
       }
 
@@ -128,5 +132,13 @@ export class Tab3Page {
 
   resetPage() {
     this.navCtrl.navigateRoot('/qr-scanner');
+  }
+
+  isProductive(voucher: Voucher): boolean {
+    return voucher.type === this.serviceType || voucher.type === this.packageType;
+  }
+
+  isQuoteable(voucher: Voucher): boolean {
+    return voucher.type === this.quoteType;
   }
 }

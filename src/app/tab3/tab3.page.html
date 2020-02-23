@@ -69,7 +69,7 @@
                 {{ order.voucher.type }}
             </ion-label>
         </ion-item>
-        <div *ngIf="isQuoteable()">
+        <div *ngIf="isQuoteable(order.voucher)">
             <ion-item>
                 <ion-label>
                     Do wykorzystania
@@ -80,7 +80,7 @@
             </ion-item>
 
         </div>
-        <div *ngIf="isProductable()">
+        <div *ngIf="isProductive(order.voucher)">
             <ion-item>
                 <ion-label>
                     {{ order.voucher.product.title }} zł
