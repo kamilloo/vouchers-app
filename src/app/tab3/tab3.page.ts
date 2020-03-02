@@ -27,14 +27,14 @@ export class Tab3Page {
   order: Order;
   paymentConfirmation: PaymentConfirmation;
   responseError: ResponseError;
-  // constructor(private qrScanner: QRScanner) {}
   used_at: any;
   canPay: boolean;
   expired_at: any;
   quoteType: string;
   serviceType: string;
   packageType: string;
-  constructor(private qrScanner: BarcodeScanner, private voucherService: VouchersService, private navCtrl: NavController) {
+  // constructor(private qrScanner: BarcodeScanner, private voucherService: VouchersService, private navCtrl: NavController) {
+  constructor(private qrScanner: QRScanner, private voucherService: VouchersService, private navCtrl: NavController) {
     this.rejected = false;
     this.verified = false;
     this.isVerifying = false;
@@ -48,43 +48,45 @@ export class Tab3Page {
   }
 
   scan() {
-    // this.qrScanner.prepare()
-    //     .then((status: QRScannerStatus) => {
-    //       if (status.authorized) {
-    //         // camera permission was granted
-    //
-    //
-    //         // start scanning
-    //         let scanSub = this.qrScanner.scan().subscribe((qrCode: string) => {
-    //           this.qrCode = qrCode;
-    //           console.log('Scanned something', qrCode);
-    //
-    //           this.qrScanner.hide(); // hide camera preview
-    //           scanSub.unsubscribe(); // stop scanning
-    //         });
-    //
-    //       } else if (status.denied) {
-    //         // camera permission was permanently denied
-    //         // you must use QRScanner.openSettings() method to guide the user to the settings page
-    //         // then they can grant the permission from there
-    //       } else {
-    //         // permission was denied, but not permanently. You can ask for permission again at a later time.
-    //       }
-    //     })
-    //     .catch((e: any) => console.log('Error is', e));
+    this.qrScanner.prepare()
+        .then((status: QRScannerStatus) => {
+          if (status.authorized) {
+            // camera permission was granted
 
-    this.qrScanner.scan().then(barcodeData => {
-      this.qrCode = barcodeData.text;
 
-      this.verify();
-    }).catch(err => {
-      console.log('Error', err);
-    });
+            // start scanning
+            let scanSub = this.qrScanner.scan().subscribe((qrCode: string) => {
+              this.qrCode = qrCode;
+              console.log('Scanned something', qrCode);
+
+              this.qrScanner.hide(); // hide camera preview
+              scanSub.unsubscribe(); // stop scanning
+              this.verify();
+
+            });
+
+          } else if (status.denied) {
+            // camera permission was permanently denied
+            // you must use QRScanner.openSettings() method to guide the user to the settings page
+            // then they can grant the permission from there
+          } else {
+            // permission was denied, but not permanently. You can ask for permission again at a later time.
+          }
+        })
+        .catch((e: any) => console.log('Error is', e));
+
+    // this.qrScanner.scan().then(barcodeData => {
+    //   this.qrCode = barcodeData.text;
+    //
+    //   this.verify();
+    // }).catch(err => {
+    //   console.log('Error', err);
+    // });
   }
+
+
   submitCode() {
     this.verify();
-
-
   }
   payByCode(event) {
 
